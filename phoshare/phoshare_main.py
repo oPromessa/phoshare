@@ -49,7 +49,7 @@ _MTIME_FUDGE = 3
 # - iPhoto help topic: About digital cameras that support RAW files
 # - Apple RAW Support listing: http://www.apple.com/aperture/specs/raw.html
 # - ExifTool supported formats (R/W only): http://www.sno.phy.queensu.ca/~phil/exiftool/#supported
-_EXIF_EXTENSIONS = ('3fr', 'arw', 'ciff', 'cr2', 'crw', 'dcr', 'erf', 'jpg', 'jpeg', 'k25', 'kdc',
+_EXIF_EXTENSIONS = ('3fr', 'arw', 'ciff', 'cr2', 'crw', 'dcr', 'erf', 'jpg', 'jpeg', 'k25', 'kdc', 'mov', 'mp4',
                     'nef', 'nrw', 'orf', 'pef', 'png', 'raf', 'raw', 'rw2', 'rwl', 'sr2', 'srf',
                     'srw', 'tif', 'tiff')
 
@@ -286,6 +286,7 @@ class ExportFile(object):
                 _logger.debug(u'%s up to date.', self.export_file)
 
             # if we copy, we update the IPTC data in the copied file
+            #print "MSP:" + "# if we copy, we update the IPTC data in the copied file" + source_file.encode('ascii', 'ignore').decode('ascii')
             if exists and do_iptc and not options.link:
                 self.check_iptc_data(self.export_file, options, file_updated=do_export)
 
@@ -351,6 +352,7 @@ class ExportFile(object):
     def check_iptc_data(self, export_file, options, is_original=False, file_updated=False):
         """Tests if a file has the proper keywords and caption in the meta
            data."""
+        #print "MSP check_iptc_data" + export_file.encode('ascii', 'ignore').decode('ascii')
         if not su.getfileextension(export_file) in _EXIF_EXTENSIONS:
             return False
         messages = []
@@ -370,6 +372,10 @@ class ExportFile(object):
         new_rating = -1
         
         new_keywords = self.get_export_keywords(options.face_keywords)
+        #print "MSP Keywords:" 
+        #print iptc_data.keywords
+        print "MSP NewKeywords:" 
+        print new_keywords
         if not imageutils.compare_keywords(new_keywords, iptc_data.keywords):
             messages.append(u'  File keywords:   %s' % (u','.join(iptc_data.keywords)))
             if new_keywords == None:
